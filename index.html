@@ -230,8 +230,8 @@
     <div class="progress-fill" id="prog-bar" style="width:0%"></div>
   </div>
   <div class="tabs">
-    <button class="tab active" id="tab-btn-turnover" onclick="switchTab('turnover')">🧹 Turnover</button>
-    <button class="tab" id="tab-btn-checkout" onclick="switchTab('checkout')">📋 Checkout</button>
+    <button class="tab active" id="tab-btn-checkout" onclick="switchTab('checkout')">📋 Checkout</button>
+    <button class="tab" id="tab-btn-turnover" onclick="switchTab('turnover')">🧹 Turnover</button>
   </div>
 </div>
 
@@ -243,8 +243,64 @@
     <p>The suite is guest-ready. Nice work!</p>
   </div>
 
+  <!-- ══ CHECKOUT TAB ══ -->
+  <div id="tab-checkout">
+
+    <div class="section" id="sec-inspect">
+      <div class="section-header open" onclick="toggleSection('inspect')">
+        <div class="section-left">
+          <span class="section-icon">🔍</span>
+          <span class="section-name">Immediate inspection</span>
+          <span class="section-badge" id="badge-inspect">0/3</span>
+        </div>
+        <span class="chevron open" id="chev-inspect">▼</span>
+      </div>
+      <div class="section-prog"><div class="section-prog-fill" id="spf-inspect" style="width:0%"></div></div>
+      <div class="items open" id="items-inspect">
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Walk through and check for damage or missing items - photograph anything</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Note any issues to report to Airbnb within the review/claim window</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-launder">
+      <div class="section-header" onclick="toggleSection('launder')">
+        <div class="section-left">
+          <span class="section-icon">🧺</span>
+          <span class="section-name">Strip & launder</span>
+          <span class="section-badge" id="badge-launder">0/3</span>
+        </div>
+        <span class="chevron" id="chev-launder">▼</span>
+      </div>
+      <div class="section-prog"><div class="section-prog-fill" id="spf-launder" style="width:0%"></div></div>
+      <div class="items" id="items-launder">
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Strip bed sheets/pillowcases, gather all towels</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Start laundry (sheets, towels) in the washer/dryer</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check duvet/blankets for stains - wash if needed</span></div>
+      </div>
+    </div>
+
+    <div class="section" id="sec-closeout">
+      <div class="section-header" onclick="toggleSection('closeout')">
+        <div class="section-left">
+          <span class="section-icon">✅</span>
+          <span class="section-name">Close-out & admin</span>
+          <span class="section-badge" id="badge-closeout">0/3</span>
+        </div>
+        <span class="chevron" id="chev-closeout">▼</span>
+      </div>
+      <div class="section-prog"><div class="section-prog-fill" id="spf-closeout" style="width:0%"></div></div>
+      <div class="items" id="items-closeout">
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm all amenities present and working (TV, remotes, kitchen items)</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Take "ready" photos if anything was rearranged</span></div>
+        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Leave the guest a review (and respond to theirs)</span></div>
+      </div>
+    </div>
+
+  </div><!-- end checkout tab -->
+
   <!-- ══ TURNOVER TAB ══ -->
-  <div id="tab-turnover">
+  <div id="tab-turnover" style="display:none">
 
     <div class="section" id="sec-access">
       <div class="section-header open" onclick="toggleSection('access')">
@@ -383,62 +439,6 @@
 
   </div><!-- end turnover tab -->
 
-  <!-- ══ CHECKOUT TAB ══ -->
-  <div id="tab-checkout" style="display:none">
-
-    <div class="section" id="sec-inspect">
-      <div class="section-header open" onclick="toggleSection('inspect')">
-        <div class="section-left">
-          <span class="section-icon">🔍</span>
-          <span class="section-name">Immediate inspection</span>
-          <span class="section-badge" id="badge-inspect">0/3</span>
-        </div>
-        <span class="chevron open" id="chev-inspect">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-inspect" style="width:0%"></div></div>
-      <div class="items open" id="items-inspect">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Walk through and check for damage or missing items - photograph anything</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Note any issues to report to Airbnb within the review/claim window</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-launder">
-      <div class="section-header" onclick="toggleSection('launder')">
-        <div class="section-left">
-          <span class="section-icon">🧺</span>
-          <span class="section-name">Strip & launder</span>
-          <span class="section-badge" id="badge-launder">0/3</span>
-        </div>
-        <span class="chevron" id="chev-launder">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-launder" style="width:0%"></div></div>
-      <div class="items" id="items-launder">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Strip bed sheets/pillowcases, gather all towels</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Start laundry (sheets, towels) in the washer/dryer</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check duvet/blankets for stains - wash if needed</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-closeout">
-      <div class="section-header" onclick="toggleSection('closeout')">
-        <div class="section-left">
-          <span class="section-icon">✅</span>
-          <span class="section-name">Close-out & admin</span>
-          <span class="section-badge" id="badge-closeout">0/3</span>
-        </div>
-        <span class="chevron" id="chev-closeout">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-closeout" style="width:0%"></div></div>
-      <div class="items" id="items-closeout">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm all amenities present and working (TV, remotes, kitchen items)</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Take "ready" photos if anything was rearranged</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Leave the guest a review (and respond to theirs)</span></div>
-      </div>
-    </div>
-
-  </div><!-- end checkout tab -->
-
 </div><!-- end content -->
 
 <!-- Bottom bar -->
@@ -464,7 +464,7 @@
 
 <script>
   const STORE = 'airbnb-checklist-v2';
-  let currentTab = 'turnover';
+  let currentTab = 'checkout';
 
   const tabSections = {
     turnover: ['access','bedroom','bathroom','kitchen','living','patio','safety'],
