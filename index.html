@@ -31,11 +31,11 @@
       padding-bottom: 80px;
     }
 
-    /* ── Header ── */
+    /* Header */
     .header {
       background: var(--primary);
       color: white;
-      padding: 16px 16px 0;
+      padding: 16px 16px 16px;
       position: sticky;
       top: 0;
       z-index: 20;
@@ -72,7 +72,6 @@
       background: rgba(255,255,255,0.25);
       border-radius: 99px;
       height: 7px;
-      margin-bottom: 14px;
       overflow: hidden;
     }
     .progress-fill {
@@ -82,17 +81,7 @@
       transition: width 0.35s cubic-bezier(.4,0,.2,1);
     }
 
-    /* Tabs */
-    .tabs { display: flex; gap: 2px; }
-    .tab {
-      flex: 1; padding: 10px 8px; border: none; cursor: pointer;
-      font-size: 13px; font-weight: 600; border-radius: 8px 8px 0 0;
-      background: rgba(255,255,255,0.18); color: rgba(255,255,255,0.85);
-      transition: background 0.2s, color 0.2s;
-    }
-    .tab.active { background: var(--gray-50); color: var(--primary); }
-
-    /* ── Content ── */
+    /* Content */
     .content { padding: 12px; }
 
     /* Done banner */
@@ -106,7 +95,7 @@
     .done-banner h2 { color: var(--green-text); font-size: 16px; margin-bottom: 3px; }
     .done-banner p { color: #15803d; font-size: 13px; }
 
-    /* ── Section card ── */
+    /* Section card */
     .section {
       background: white; border-radius: var(--radius);
       margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden;
@@ -134,13 +123,8 @@
     .chevron.open { transform: rotate(180deg); }
 
     /* Section mini-progress */
-    .section-prog {
-      height: 3px; background: var(--gray-100);
-    }
-    .section-prog-fill {
-      height: 3px; background: var(--green);
-      transition: width 0.3s ease;
-    }
+    .section-prog { height: 3px; background: var(--gray-100); }
+    .section-prog-fill { height: 3px; background: var(--green); transition: width 0.3s ease; }
 
     /* Items */
     .items { display: none; }
@@ -170,7 +154,7 @@
     }
     .item.checked .item-text { color: var(--gray-400); text-decoration: line-through; }
 
-    /* ── Bottom bar ── */
+    /* Bottom bar */
     .bottom-bar {
       position: fixed; bottom: 0; left: 0; right: 0;
       background: white; border-top: 1px solid var(--gray-200);
@@ -188,7 +172,7 @@
     .btn-ghost:hover { background: var(--gray-200); }
     .btn-danger { background: #fee2e2; color: #b91c1c; }
 
-    /* ── Dialog ── */
+    /* Dialog */
     .overlay {
       display: none; position: fixed; inset: 0;
       background: rgba(0,0,0,0.45); z-index: 100;
@@ -229,13 +213,9 @@
   <div class="progress-track">
     <div class="progress-fill" id="prog-bar" style="width:0%"></div>
   </div>
-  <div class="tabs">
-    <button class="tab active" id="tab-btn-checkout" onclick="switchTab('checkout')">📋 Checkout</button>
-    <button class="tab" id="tab-btn-turnover" onclick="switchTab('turnover')">🧹 Turnover</button>
-  </div>
 </div>
 
-<div class="content">
+<div class="content" id="content">
 
   <div class="done-banner" id="done-banner">
     <div class="emoji">🎉</div>
@@ -243,201 +223,7 @@
     <p>The suite is guest-ready. Nice work!</p>
   </div>
 
-  <!-- ══ CHECKOUT TAB ══ -->
-  <div id="tab-checkout">
-
-    <div class="section" id="sec-inspect">
-      <div class="section-header open" onclick="toggleSection('inspect')">
-        <div class="section-left">
-          <span class="section-icon">🔍</span>
-          <span class="section-name">Immediate inspection</span>
-          <span class="section-badge" id="badge-inspect">0/3</span>
-        </div>
-        <span class="chevron open" id="chev-inspect">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-inspect" style="width:0%"></div></div>
-      <div class="items open" id="items-inspect">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Walk through and check for damage or missing items - photograph anything</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Note any issues to report to Airbnb within the review/claim window</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-launder">
-      <div class="section-header" onclick="toggleSection('launder')">
-        <div class="section-left">
-          <span class="section-icon">🧺</span>
-          <span class="section-name">Strip & launder</span>
-          <span class="section-badge" id="badge-launder">0/3</span>
-        </div>
-        <span class="chevron" id="chev-launder">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-launder" style="width:0%"></div></div>
-      <div class="items" id="items-launder">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Strip bed sheets/pillowcases, gather all towels</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Start laundry (sheets, towels) in the washer/dryer</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check duvet/blankets for stains - wash if needed</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-closeout">
-      <div class="section-header" onclick="toggleSection('closeout')">
-        <div class="section-left">
-          <span class="section-icon">✅</span>
-          <span class="section-name">Close-out & admin</span>
-          <span class="section-badge" id="badge-closeout">0/3</span>
-        </div>
-        <span class="chevron" id="chev-closeout">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-closeout" style="width:0%"></div></div>
-      <div class="items" id="items-closeout">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm all amenities present and working (TV, remotes, kitchen items)</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Take "ready" photos if anything was rearranged</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Leave the guest a review (and respond to theirs)</span></div>
-      </div>
-    </div>
-
-  </div><!-- end checkout tab -->
-
-  <!-- ══ TURNOVER TAB ══ -->
-  <div id="tab-turnover" style="display:none">
-
-    <div class="section" id="sec-access">
-      <div class="section-header open" onclick="toggleSection('access')">
-        <div class="section-left">
-          <span class="section-icon">🔑</span>
-          <span class="section-name">Access & Arrival</span>
-          <span class="section-badge" id="badge-access">0/4</span>
-        </div>
-        <span class="chevron open" id="chev-access">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-access" style="width:0%"></div></div>
-      <div class="items open" id="items-access">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Set a new keypad code for this guest; test that it works</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm Airbnb sent code + check-in time (3 PM); send WiFi password and parking instructions if not</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Clear the driveway parking spot</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Make sure separate entrance path is clear, lit, and swept</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-bedroom">
-      <div class="section-header" onclick="toggleSection('bedroom')">
-        <div class="section-left">
-          <span class="section-icon">🛏</span>
-          <span class="section-name">Bedroom</span>
-          <span class="section-badge" id="badge-bedroom">0/2</span>
-        </div>
-        <span class="chevron" id="chev-bedroom">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-bedroom" style="width:0%"></div></div>
-      <div class="items" id="items-bedroom">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Make bed with washed sheets, pillowcases, duvet cover (spares in closet)</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Dust nightstands/surfaces, empty closet of prior items</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-bathroom">
-      <div class="section-header" onclick="toggleSection('bathroom')">
-        <div class="section-left">
-          <span class="section-icon">🚿</span>
-          <span class="section-name">Bathroom</span>
-          <span class="section-badge" id="badge-bathroom">0/5</span>
-        </div>
-        <span class="chevron" id="chev-bathroom">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-bathroom" style="width:0%"></div></div>
-      <div class="items" id="items-bathroom">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Clean walk-in shower, toilet, sink, mirror</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Hang washed towels - 2 bath + 2 hand, plus bath mat</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Empty trash, fresh liner</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Clear hair from shower drain</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-kitchen">
-      <div class="section-header" onclick="toggleSection('kitchen')">
-        <div class="section-left">
-          <span class="section-icon">🍳</span>
-          <span class="section-name">Kitchen</span>
-          <span class="section-badge" id="badge-kitchen">0/9</span>
-        </div>
-        <span class="chevron" id="chev-kitchen">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-kitchen" style="width:0%"></div></div>
-      <div class="items" id="items-kitchen">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Wash/put away all dishes; check dishwasher empty</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Wipe counters, stovetop, sink, microwave inside</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Clean fridge; toss expired items</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check coffee filters and sugar/creamer are stocked</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check glasses, mugs, plates, utensils, pots/pans all present and clean</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Vacuum both sides of kitchen floor mats</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Run/clean garbage disposal</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check under sink for leaks or low supplies</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-living">
-      <div class="section-header" onclick="toggleSection('living')">
-        <div class="section-left">
-          <span class="section-icon">🛋</span>
-          <span class="section-name">Living Room & General</span>
-          <span class="section-badge" id="badge-living">0/9</span>
-        </div>
-        <span class="chevron" id="chev-living">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-living" style="width:0%"></div></div>
-      <div class="items" id="items-living">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Wipe/clear all surfaces</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Dust surfaces, wipe 65" TV screen and remotes</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check basement temperature and adjust</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Fluff couch cushions, fold throw blankets</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Empty all trash bins, fresh liners</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check all light bulbs are working</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Close and latch all windows</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Run Roborock to vacuum/mop floors</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-patio">
-      <div class="section-header" onclick="toggleSection('patio')">
-        <div class="section-left">
-          <span class="section-icon">🌿</span>
-          <span class="section-name">Side Yard & Exterior</span>
-          <span class="section-badge" id="badge-patio">0/4</span>
-        </div>
-        <span class="chevron" id="chev-patio">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-patio" style="width:0%"></div></div>
-      <div class="items" id="items-patio">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Use leaf blower to clear patio and garage entrance</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Pick up any pet waste from yard</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Tidy side yard patio, wipe down chairs/table</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Wipe down cobwebs around the entrance and side door</span></div>
-      </div>
-    </div>
-
-    <div class="section" id="sec-safety">
-      <div class="section-header" onclick="toggleSection('safety')">
-        <div class="section-left">
-          <span class="section-icon">🔒</span>
-          <span class="section-name">Safety & Final Pass</span>
-          <span class="section-badge" id="badge-safety">0/4</span>
-        </div>
-        <span class="chevron" id="chev-safety">▼</span>
-      </div>
-      <div class="section-prog"><div class="section-prog-fill" id="spf-safety" style="width:0%"></div></div>
-      <div class="items" id="items-safety">
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Check smoke/CO alarms - if chirping, replace batteries</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm Stargate-B WiFi is connecting</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Confirm no lingering pet odors - smell-check living area and bed</span></div>
-        <div class="item" onclick="toggle(this)"><div class="cb"><svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><span class="item-text">Quick walk-through as if you were the guest - does anything feel off?</span></div>
-      </div>
-    </div>
-
-  </div><!-- end turnover tab -->
+  <!-- Sections are built by JS from the SECTIONS data below -->
 
 </div><!-- end content -->
 
@@ -454,7 +240,7 @@
   <div class="dialog">
     <div class="big-icon">🔄</div>
     <h3>Reset checklist?</h3>
-    <p>Uncheck everything on both tabs - ready to start a fresh turnover.</p>
+    <p>Uncheck everything - ready to start a fresh turnover.</p>
     <div class="dialog-btns">
       <button class="btn btn-ghost" onclick="hideReset()">Cancel</button>
       <button class="btn btn-primary" onclick="doReset()">Reset</button>
@@ -463,13 +249,100 @@
 </div>
 
 <script>
-  const STORE = 'airbnb-checklist-v2';
-  let currentTab = 'checkout';
+  const STORE = 'airbnb-checklist-v3';
 
-  const tabSections = {
-    turnover: ['access','bedroom','bathroom','kitchen','living','patio','safety'],
-    checkout: ['inspect','launder','closeout']
-  };
+  // Mirrors the Trello "Turnover" card, in the same section order.
+  const SECTIONS = [
+    { id: 'checkout', icon: '📋', name: 'Checkout & Close-Out', items: [
+      'Walk through and check for damage or missing items - photograph anything',
+      'Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)',
+      'Strip bed sheets/pillowcases, gather all towels',
+      'Start laundry (sheets, towels) in the washer/dryer',
+      'Check duvet/blankets for stains - wash if needed',
+      'Confirm all amenities present and working (TV, remotes, kitchen items)',
+      'Take "ready" photos if anything was rearranged'
+    ]},
+    { id: 'bedroom', icon: '🛏', name: 'Bedroom', items: [
+      'Make bed with washed sheets, pillowcases, duvet cover (spare sheets in closet)',
+      'Dust nightstands/surfaces, empty closet of prior items'
+    ]},
+    { id: 'bathroom', icon: '🚿', name: 'Bathroom', items: [
+      'Clean walk-in shower, toilet, sink, mirror',
+      'Clear hair from shower drain',
+      'Hang washed towels 2 bath + 2 hand, plus bath mat',
+      'Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash',
+      'Empty trash, fresh liner'
+    ]},
+    { id: 'kitchen', icon: '🍳', name: 'Kitchen', items: [
+      'Start dishwasher and put away all dishes; check dishwasher empty',
+      'Wipe microwave inside, counters, stovetop, sink',
+      'Clean fridge; toss expired items',
+      'Check coffee filters and sugar/creamer are stocked',
+      'Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil',
+      'Check glasses, mugs, plates, utensils, pots/pans all present and clean',
+      'Vacuum both sides of kitchen floor mats',
+      'Run/clean garbage disposal',
+      'Check under sink for leaks or low supplies'
+    ]},
+    { id: 'living', icon: '🛋', name: 'Living Room & General', items: [
+      'Wipe/clear all surfaces (All tables, chairs, dry bar, window sills too)',
+      'Close and latch all windows',
+      'Dust surfaces, 65" TV screen and wipe remotes',
+      'Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts',
+      'Check basement temperature and adjust',
+      'Fluff couch and recliner cushions, check for pet hair; fold throw blankets',
+      'Check all light bulbs are working',
+      'Empty trash/recycle bins, add fresh liners and backup in the bin',
+      'Run Roborock to vacuum/mop floors'
+    ]},
+    { id: 'exterior', icon: '🌿', name: 'Side Yard & Exterior', items: [
+      'Clear the driveway parking spot',
+      'Use leaf blower to clear side yard patio and garage entrance',
+      'Pick up any pet waste from yard',
+      'Tidy side yard patio, wipe down chairs/table',
+      'Wipe down cobwebs around all entrances (Interior and exterior)'
+    ]},
+    { id: 'arrival', icon: '✅', name: 'Arrival & Final Pass', items: [
+      'Set the scene for arrival - open blinds',
+      'Confirm Stargate-B WiFi is connecting (Ask google something on the speaker to verify)',
+      'Confirm no lingering pet odors - smell-check living area and bed',
+      'Vacuum the stairs to the basement',
+      'Quick walk-through as if you were the guest - does anything feel off?'
+    ]},
+    { id: 'admin', icon: '🗒', name: 'Host / Admin', items: [
+      'Set a new keypad code for new guest; test that it works',
+      'Note any issues to report to Airbnb within the review/claim window',
+      'Leave the guest a review (and respond to theirs)'
+    ]}
+  ];
+
+  const CHECK_SVG = '<svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // Build the sections
+  const content = document.getElementById('content');
+  SECTIONS.forEach((sec, si) => {
+    const open = si === 0;
+    const section = document.createElement('div');
+    section.className = 'section';
+    section.id = 'sec-' + sec.id;
+    section.innerHTML =
+      '<div class="section-header' + (open ? ' open' : '') + '" onclick="toggleSection(\'' + sec.id + '\')">' +
+        '<div class="section-left">' +
+          '<span class="section-icon">' + sec.icon + '</span>' +
+          '<span class="section-name">' + sec.name + '</span>' +
+          '<span class="section-badge" id="badge-' + sec.id + '">0/' + sec.items.length + '</span>' +
+        '</div>' +
+        '<span class="chevron' + (open ? ' open' : '') + '" id="chev-' + sec.id + '">▼</span>' +
+      '</div>' +
+      '<div class="section-prog"><div class="section-prog-fill" id="spf-' + sec.id + '" style="width:0%"></div></div>' +
+      '<div class="items' + (open ? ' open' : '') + '" id="items-' + sec.id + '">' +
+        sec.items.map(t =>
+          '<div class="item" onclick="toggle(this)"><div class="cb">' + CHECK_SVG + '</div>' +
+          '<span class="item-text">' + t + '</span></div>'
+        ).join('') +
+      '</div>';
+    content.appendChild(section);
+  });
 
   // Set today's date
   const d = new Date();
@@ -493,30 +366,19 @@
     chev.classList.toggle('open', !open);
   }
 
-  function switchTab(tab) {
-    currentTab = tab;
-    document.getElementById('tab-turnover').style.display = tab === 'turnover' ? '' : 'none';
-    document.getElementById('tab-checkout').style.display = tab === 'checkout' ? '' : 'none';
-    document.getElementById('tab-btn-turnover').classList.toggle('active', tab === 'turnover');
-    document.getElementById('tab-btn-checkout').classList.toggle('active', tab === 'checkout');
-    refresh();
-  }
-
   function refresh() {
-    const secs = tabSections[currentTab];
     let total = 0, done = 0;
-    const allSecs = [...tabSections.turnover, ...tabSections.checkout];
-    allSecs.forEach(id => {
-      const container = document.getElementById('items-' + id);
+    SECTIONS.forEach(sec => {
+      const container = document.getElementById('items-' + sec.id);
       if (!container) return;
       const all = container.querySelectorAll('.item');
       const checked = container.querySelectorAll('.item.checked');
       const pct = all.length ? (checked.length / all.length * 100) : 0;
-      const badge = document.getElementById('badge-' + id);
-      const spf = document.getElementById('spf-' + id);
+      const badge = document.getElementById('badge-' + sec.id);
+      const spf = document.getElementById('spf-' + sec.id);
       if (badge) { badge.textContent = checked.length + '/' + all.length; badge.classList.toggle('done', checked.length === all.length && all.length > 0); }
       if (spf) spf.style.width = pct + '%';
-      if (secs.includes(id)) { total += all.length; done += checked.length; }
+      total += all.length; done += checked.length;
     });
     const pct = total ? Math.round(done / total * 100) : 0;
     document.getElementById('prog-bar').style.width = pct + '%';
@@ -529,9 +391,10 @@
 
   function save() {
     const state = {};
-    document.querySelectorAll('.item').forEach((item, i) => {
+    document.querySelectorAll('.item').forEach((item) => {
       const parentId = item.closest('.items').id;
-      state[parentId + '-' + i] = item.classList.contains('checked');
+      const idx = [...item.parentNode.children].indexOf(item);
+      state[parentId + '-' + idx] = item.classList.contains('checked');
     });
     try { localStorage.setItem(STORE, JSON.stringify(state)); } catch(e) {}
   }
@@ -541,8 +404,9 @@
       const saved = localStorage.getItem(STORE);
       if (!saved) return;
       const state = JSON.parse(saved);
-      document.querySelectorAll('.item').forEach((item, i) => {
-        const key = item.closest('.items').id + '-' + i;
+      document.querySelectorAll('.item').forEach((item) => {
+        const idx = [...item.parentNode.children].indexOf(item);
+        const key = item.closest('.items').id + '-' + idx;
         if (state[key]) { item.classList.add('checked'); item.querySelector('.cb').classList.add('checked'); }
       });
     } catch(e) {}
