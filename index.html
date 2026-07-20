@@ -1,428 +1,201 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Airbnb Basement Suite Turnover Checklist</title>
-  <style>
-    :root {
-      color-scheme: light;
-      --primary: #e05a4e;
-      --primary-dark: #c44a3e;
-      --green: #22c55e;
-      --green-bg: #dcfce7;
-      --green-text: #166534;
-      --gray-50: #f9fafb;
-      --gray-100: #f3f4f6;
-      --gray-200: #e5e7eb;
-      --gray-400: #9ca3af;
-      --gray-500: #6b7280;
-      --gray-600: #4b5563;
-      --gray-800: #1f2937;
-      --radius: 12px;
-      --shadow: 0 1px 3px rgba(0,0,0,0.08);
-    }
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      background: var(--gray-50);
-      color: var(--gray-800);
-      min-height: 100vh;
-      padding-bottom: 80px;
-    }
-
-    /* Header */
-    .header {
-      background: var(--primary);
-      color: white;
-      padding: 16px 16px 16px;
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      box-shadow: 0 2px 8px rgba(224,90,78,0.3);
-    }
-    .header-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 2px; }
-    .header h1 { font-size: 18px; font-weight: 700; line-height: 1.2; }
-    .header-sub { font-size: 11px; opacity: 0.8; margin-bottom: 12px; margin-top: 2px; }
-    .date-badge {
-      font-size: 11px;
-      background: rgba(255,255,255,0.2);
-      padding: 3px 8px;
-      border-radius: 99px;
-      white-space: nowrap;
-    }
-
-    .header-reset {
-      font-size: 15px; font-weight: 600; color: white; cursor: pointer;
-      background: rgba(255,255,255,0.2); border: none;
-      padding: 8px 20px; border-radius: 99px; white-space: nowrap;
-      transition: background 0.15s;
-    }
-    .header-reset:hover { background: rgba(255,255,255,0.32); }
-
-    /* Progress */
-    .progress-row {
-      display: flex;
-      justify-content: space-between;
-      font-size: 12px;
-      opacity: 0.9;
-      margin-bottom: 6px;
-    }
-    .progress-track {
-      background: rgba(255,255,255,0.25);
-      border-radius: 99px;
-      height: 7px;
-      overflow: hidden;
-    }
-    .progress-fill {
-      background: white;
-      height: 100%;
-      border-radius: 99px;
-      transition: width 0.35s cubic-bezier(.4,0,.2,1);
-    }
-
-    /* Content */
-    .content { padding: 12px; }
-
-    /* Done banner */
-    .done-banner {
-      display: none; background: var(--green-bg);
-      border: 1.5px solid #86efac; border-radius: var(--radius);
-      padding: 16px; text-align: center; margin-bottom: 12px;
-    }
-    .done-banner.show { display: block; }
-    .done-banner .emoji { font-size: 28px; margin-bottom: 6px; }
-    .done-banner h2 { color: var(--green-text); font-size: 16px; margin-bottom: 3px; }
-    .done-banner p { color: #15803d; font-size: 13px; }
-
-    /* Section card */
-    .section {
-      background: white; border-radius: var(--radius);
-      margin-bottom: 10px; box-shadow: var(--shadow); overflow: hidden;
-    }
-    .section-header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 16px; cursor: pointer; user-select: none;
-      border-bottom: 1px solid transparent; transition: border-color 0.2s;
-    }
-    .section-header.open { border-bottom-color: var(--gray-100); }
-    .section-left { display: flex; align-items: center; gap: 10px; }
-    .section-icon { font-size: 17px; }
-    .section-name { font-size: 14px; font-weight: 700; }
-    .section-badge {
-      font-size: 11px; font-weight: 600;
-      padding: 2px 8px; border-radius: 99px;
-      background: var(--gray-100); color: var(--gray-500);
-      transition: background 0.2s, color 0.2s;
-    }
-    .section-badge.done { background: var(--green-bg); color: var(--green-text); }
-    .chevron {
-      font-size: 11px; color: var(--gray-400);
-      transition: transform 0.25s; display: inline-block;
-    }
-    .chevron.open { transform: rotate(180deg); }
-
-    /* Section mini-progress */
-    .section-prog { height: 3px; background: var(--gray-100); }
-    .section-prog-fill { height: 3px; background: var(--green); transition: width 0.3s ease; }
-
-    /* Items */
-    .items { display: none; }
-    .items.open { display: block; }
-
-    .item {
-      display: flex; align-items: flex-start; gap: 13px;
-      padding: 13px 16px; border-bottom: 1px solid var(--gray-100);
-      cursor: pointer; transition: background 0.12s; position: relative;
-    }
-    .item:last-child { border-bottom: none; }
-    .item:active { background: var(--gray-50); }
-
-    .cb {
-      width: 24px; height: 24px; min-width: 24px;
-      border-radius: 7px; border: 2px solid var(--gray-200);
-      display: flex; align-items: center; justify-content: center;
-      transition: all 0.18s; margin-top: 0px;
-    }
-    .cb.checked { background: var(--green); border-color: var(--green); }
-    .cb svg { display: none; }
-    .cb.checked svg { display: block; }
-
-    .item-text {
-      font-size: 14px; line-height: 1.5;
-      color: var(--gray-800); transition: all 0.18s; flex: 1;
-    }
-    .item.checked .item-text { color: var(--gray-400); text-decoration: line-through; }
-
-    /* Bottom bar */
-    .bottom-bar {
-      position: fixed; bottom: 0; left: 0; right: 0;
-      background: white; border-top: 1px solid var(--gray-200);
-      padding: 10px 16px; display: flex; gap: 8px;
-      justify-content: space-between; align-items: center;
-      box-shadow: 0 -2px 8px rgba(0,0,0,0.06); z-index: 15;
-    }
-    .bottom-stat { font-size: 12px; color: var(--gray-500); }
-    .bottom-stat strong { color: var(--gray-800); }
-    .btn {
-      padding: 9px 18px; border-radius: 8px; border: none;
-      font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s;
-    }
-    .btn-ghost { background: var(--gray-100); color: var(--gray-600); }
-    .btn-ghost:hover { background: var(--gray-200); }
-    .btn-danger { background: #fee2e2; color: #b91c1c; }
-
-    /* Dialog */
-    .overlay {
-      display: none; position: fixed; inset: 0;
-      background: rgba(0,0,0,0.45); z-index: 100;
-      align-items: center; justify-content: center;
-    }
-    .overlay.show { display: flex; }
-    .dialog {
-      background: white; border-radius: 18px;
-      padding: 24px; width: min(320px, 90vw); text-align: center;
-      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
-    }
-    .dialog .big-icon { font-size: 36px; margin-bottom: 10px; }
-    .dialog h3 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
-    .dialog p { font-size: 14px; color: var(--gray-500); margin-bottom: 20px; line-height: 1.5; }
-    .dialog-btns { display: flex; gap: 8px; }
-    .dialog-btns .btn { flex: 1; padding: 11px; }
-    .btn-primary { background: var(--primary); color: white; }
-    .btn-primary:hover { background: var(--primary-dark); }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>8271 Ralph Ln - Cleaning Checklist</title>
+<style>
+  :root{
+    --bg:#0f1420; --card:#171e2e; --card2:#1d2740; --ink:#e8edf7; --muted:#93a0b8;
+    --line:#2a3550; --turn:#ff6b5e; --prep:#3fb984; --turnbg:#231a1c; --prepbg:#16241f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.4;padding:16px}
+  header{max-width:1100px;margin:0 auto 14px}
+  h1{font-size:20px;margin:0 0 4px}
+  .sub{color:var(--muted);font-size:13px}
+  .cols{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:760px){.cols{grid-template-columns:1fr}}
+  .col{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+  .col.turn{border-top:4px solid var(--turn)}
+  .col.prep{border-top:4px solid var(--prep)}
+  .colhead{padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:10px}
+  .colhead h2{font-size:17px;margin:0;display:flex;align-items:center;gap:8px}
+  .pill{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;
+    padding:3px 9px;border-radius:999px}
+  .turn .pill{background:var(--turnbg);color:var(--turn)}
+  .prep .pill{background:var(--prepbg);color:var(--prep)}
+  .desc{font-size:12px;color:var(--muted);padding:0 16px 8px}
+  .bar{height:6px;background:var(--line);border-radius:999px;margin:0 16px 10px;overflow:hidden}
+  .bar > i{display:block;height:100%;width:0;transition:width .2s}
+  .turn .bar > i{background:var(--turn)}
+  .prep .bar > i{background:var(--prep)}
+  .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+  section{padding:2px 16px 10px}
+  h3{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
+    margin:14px 0 6px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  label{display:flex;gap:10px;align-items:flex-start;padding:7px 8px;border-radius:9px;
+    font-size:14px;cursor:pointer}
+  label:hover{background:var(--card2)}
+  input[type=checkbox]{width:19px;height:19px;margin-top:1px;flex:none;accent-color:#7aa2ff;cursor:pointer}
+  input:checked + span{color:var(--muted);text-decoration:line-through}
+  .foot{max-width:1100px;margin:16px auto 0;color:var(--muted);font-size:12px;text-align:center}
+  .reset{background:transparent;color:var(--muted);border:1px solid var(--line);
+    border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer}
+  .reset:hover{color:var(--ink);border-color:var(--muted)}
+</style>
 </head>
 <body>
+<header>
+  <h1>8271 Ralph Ln - Basement Suite Cleaning Checklist</h1>
+  <div class="sub">Two lists: <b>Turnover</b> (full reset after a guest leaves) and <b>Prep</b> (light refresh before the next guest when the unit has sat). Checkmarks save on this device only.</div>
+</header>
 
-<div class="header">
-  <div class="header-top">
-    <div style="display:flex; align-items:center; gap:12px;">
-      <div>
-        <h1>🏠 Airbnb Basement Suite Turnover</h1>
-        <div class="header-sub">Basement Suite · Denver</div>
-      </div>
-      <button class="header-reset" onclick="showReset()">↻ Reset</button>
+<div class="cols">
+  <!-- TURNOVER -->
+  <div class="col turn" id="turn">
+    <div class="colhead">
+      <h2><span class="pill">Turnover</span> Full reset</h2>
+      <span class="cnt" data-cnt></span>
     </div>
-    <div class="date-badge" id="date-badge"></div>
+    <div class="desc">Do the complete clean after a guest checks out.</div>
+    <div class="bar"><i></i></div>
+
+    <section>
+      <h3>Checkout &amp; Close-Out</h3>
+      <label><input type="checkbox"><span>Walk through and check for damage or missing items - photograph anything</span></label>
+      <label><input type="checkbox"><span>Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></label>
+      <label><input type="checkbox"><span>Strip bed sheets/pillowcases, gather all towels</span></label>
+      <label><input type="checkbox"><span>Start laundry (sheets, towels) in the washer/dryer</span></label>
+      <label><input type="checkbox"><span>Confirm all amenities present and working (TV, remotes, kitchen items)</span></label>
+      <label><input type="checkbox"><span>Take "ready" photos if anything was rearranged</span></label>
+      <label><input type="checkbox"><span>Note any issues to report to Airbnb within the review/claim window</span></label>
+      <label><input type="checkbox"><span>Leave the guest a review (and respond to theirs)</span></label>
+    </section>
+    <section>
+      <h3>Bedroom</h3>
+      <label><input type="checkbox"><span>Make bed with washed sheets, pillowcases, duvet cover (spare sheets in closet)</span></label>
+      <label><input type="checkbox"><span>Dust nightstands/surfaces, empty closet of prior items</span></label>
+      <label><input type="checkbox"><span>Clean closet mirror with Windex and paper towels</span></label>
+    </section>
+    <section>
+      <h3>Bathroom</h3>
+      <label><input type="checkbox"><span>Clean walk-in shower, toilet, sink, mirror</span></label>
+      <label><input type="checkbox"><span>Clear hair from shower drain</span></label>
+      <label><input type="checkbox"><span>Hang washed towels 2 bath + 2 hand, plus bath mat</span></label>
+      <label><input type="checkbox"><span>Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
+      <label><input type="checkbox"><span>Empty trash, fresh liner</span></label>
+    </section>
+    <section>
+      <h3>Kitchen</h3>
+      <label><input type="checkbox"><span>Start dishwasher and put away all dishes; check dishwasher empty</span></label>
+      <label><input type="checkbox"><span>Wipe microwave inside, counters, stovetop, sink</span></label>
+      <label><input type="checkbox"><span>Clean fridge; toss expired items</span></label>
+      <label><input type="checkbox"><span>Check coffee filters and sugar/creamer are stocked</span></label>
+      <label><input type="checkbox"><span>Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil</span></label>
+      <label><input type="checkbox"><span>Check glasses, mugs, plates, utensils, pots/pans all present and clean</span></label>
+      <label><input type="checkbox"><span>Vacuum both sides of kitchen floor mats</span></label>
+      <label><input type="checkbox"><span>Run/clean garbage disposal</span></label>
+      <label><input type="checkbox"><span>Check under sink for leaks or low supplies</span></label>
+      <label><input type="checkbox"><span>Empty trash/recycle bins, add fresh liners and backup in the bin</span></label>
+    </section>
+    <section>
+      <h3>Living Room &amp; General</h3>
+      <label><input type="checkbox"><span>Wipe/clear all surfaces (All tables, chairs, dry bar, window sills too)</span></label>
+      <label><input type="checkbox"><span>Close and latch all windows</span></label>
+      <label><input type="checkbox"><span>Dust surfaces, 65" TV screen and wipe remotes</span></label>
+      <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts</span></label>
+      <label><input type="checkbox"><span>Fluff couch and recliner cushions, check for pet hair; fold throw blankets</span></label>
+      <label><input type="checkbox"><span>Check all light bulbs are working</span></label>
+    </section>
+    <section>
+      <h3>Side Yard &amp; Exterior</h3>
+      <label><input type="checkbox"><span>Clear the driveway parking spot</span></label>
+      <label><input type="checkbox"><span>Use leaf blower to clear side yard patio and garage entrance</span></label>
+      <label><input type="checkbox"><span>Pick up any pet waste from yard</span></label>
+      <label><input type="checkbox"><span>Tidy side yard patio, wipe down chairs/table</span></label>
+      <label><input type="checkbox"><span>Wipe down cobwebs around all entrances (Interior and exterior)</span></label>
+    </section>
+    <section>
+      <h3>Arrival &amp; Final Pass</h3>
+      <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
+      <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
+      <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
+      <label><input type="checkbox"><span>Confirm guest WiFi is connecting (ask the speaker something to verify)</span></label>
+      <label><input type="checkbox"><span>Make sure smart lock code for new guest exists; test that it works</span></label>
+      <label><input type="checkbox"><span>Run Roborock to vacuum/mop floors</span></label>
+      <label><input type="checkbox"><span>Check for spider webs along ceiling corners/walls (use broom to clean)</span></label>
+      <label><input type="checkbox"><span>Confirm no lingering pet odors - smell-check living area and bed (use Ozium spray)</span></label>
+      <label><input type="checkbox"><span>Vacuum the stairs to the basement</span></label>
+    </section>
   </div>
-  <div class="progress-row">
-    <span id="prog-label">0 of 0 complete</span>
-    <span id="prog-pct">0%</span>
-  </div>
-  <div class="progress-track">
-    <div class="progress-fill" id="prog-bar" style="width:0%"></div>
+
+  <!-- PREP -->
+  <div class="col prep" id="prep">
+    <div class="colhead">
+      <h2><span class="pill">Prep</span> Light refresh</h2>
+      <span class="cnt" data-cnt></span>
+    </div>
+    <div class="desc">Use before a check-in when the unit was already turned over and may have sat. No deep cleaning.</div>
+    <div class="bar"><i></i></div>
+
+    <section>
+      <h3>Refresh</h3>
+      <label><input type="checkbox"><span>Quick dust where dust settles - nightstands, dry bar, tables, 65" TV, window sills</span></label>
+      <label><input type="checkbox"><span>Run Roborock / quick vacuum floors and basement stairs</span></label>
+      <label><input type="checkbox"><span>Air out unit; smell-check for musty or pet odors (Ozium if needed)</span></label>
+      <label><input type="checkbox"><span>Confirm bed made with fresh linens and looks crisp</span></label>
+      <label><input type="checkbox"><span>Confirm bathroom towels hung (2 bath + 2 hand + mat) and clean</span></label>
+    </section>
+    <section>
+      <h3>Verify Supplies</h3>
+      <label><input type="checkbox"><span>Bathroom restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
+      <label><input type="checkbox"><span>Kitchen starter supplies: dish soap, sponge, paper towels, trash bags, coffee filters, sugar/creamer</span></label>
+      <label><input type="checkbox"><span>Trash/recycle bins empty with fresh liners</span></label>
+      <label><input type="checkbox"><span>Confirm fridge empty and clean</span></label>
+    </section>
+    <section>
+      <h3>Arrival &amp; Final Pass</h3>
+      <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
+      <label><input type="checkbox"><span>Set and test smart lock code for the new guest</span></label>
+      <label><input type="checkbox"><span>Confirm guest WiFi is connecting</span></label>
+      <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and logged out of prior accounts</span></label>
+      <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
+      <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
+      <label><input type="checkbox"><span>Exterior: clear driveway spot, tidy patio, knock down entrance cobwebs</span></label>
+    </section>
   </div>
 </div>
 
-<div class="content" id="content">
-
-  <div class="done-banner" id="done-banner">
-    <div class="emoji">🎉</div>
-    <h2>All done!</h2>
-    <p>The suite is guest-ready. Nice work!</p>
-  </div>
-
-  <!-- Sections are built by JS from the SECTIONS data below -->
-
-</div><!-- end content -->
-
-<!-- Bottom bar -->
-<div class="bottom-bar">
-  <div class="bottom-stat">
-    <strong id="stat-done">0</strong> / <span id="stat-total">0</span> done
-  </div>
-  <button class="btn btn-ghost" onclick="showReset()">Reset checklist</button>
-</div>
-
-<!-- Reset dialog -->
-<div class="overlay" id="overlay" onclick="if(event.target===this)hideReset()">
-  <div class="dialog">
-    <div class="big-icon">🔄</div>
-    <h3>Reset checklist?</h3>
-    <p>Uncheck everything - ready to start a fresh turnover.</p>
-    <div class="dialog-btns">
-      <button class="btn btn-ghost" onclick="hideReset()">Cancel</button>
-      <button class="btn btn-primary" onclick="doReset()">Reset</button>
-    </div>
-  </div>
+<div class="foot">
+  <button class="reset" onclick="resetAll()">Reset all checkmarks</button>
+  <div style="margin-top:8px">Checkmarks are saved only in this browser on this device.</div>
 </div>
 
 <script>
-  const STORE = 'airbnb-checklist-v3';
-
-  // Mirrors the Trello "Turnover" card, in the same section order.
-  const SECTIONS = [
-    { id: 'checkout', icon: '📋', name: 'Checkout & Close-Out', items: [
-      'Walk through and check for damage or missing items - photograph anything',
-      'Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)',
-      'Strip bed sheets/pillowcases, gather all towels',
-      'Start laundry (sheets, towels) in the washer/dryer',
-      'Check duvet/blankets for stains - wash if needed',
-      'Confirm all amenities present and working (TV, remotes, kitchen items)',
-      'Take "ready" photos if anything was rearranged'
-    ]},
-    { id: 'bedroom', icon: '🛏', name: 'Bedroom', items: [
-      'Make bed with washed sheets, pillowcases, duvet cover (spare sheets in closet)',
-      'Dust nightstands/surfaces, empty closet of prior items'
-    ]},
-    { id: 'bathroom', icon: '🚿', name: 'Bathroom', items: [
-      'Clean walk-in shower, toilet, sink, mirror',
-      'Clear hair from shower drain',
-      'Hang washed towels 2 bath + 2 hand, plus bath mat',
-      'Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash',
-      'Empty trash, fresh liner'
-    ]},
-    { id: 'kitchen', icon: '🍳', name: 'Kitchen', items: [
-      'Start dishwasher and put away all dishes; check dishwasher empty',
-      'Wipe microwave inside, counters, stovetop, sink',
-      'Clean fridge; toss expired items',
-      'Check coffee filters and sugar/creamer are stocked',
-      'Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil',
-      'Check glasses, mugs, plates, utensils, pots/pans all present and clean',
-      'Vacuum both sides of kitchen floor mats',
-      'Run/clean garbage disposal',
-      'Check under sink for leaks or low supplies'
-    ]},
-    { id: 'living', icon: '🛋', name: 'Living Room & General', items: [
-      'Wipe/clear all surfaces (All tables, chairs, dry bar, window sills too)',
-      'Close and latch all windows',
-      'Dust surfaces, 65" TV screen and wipe remotes',
-      'Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts',
-      'Check basement temperature and adjust',
-      'Fluff couch and recliner cushions, check for pet hair; fold throw blankets',
-      'Check all light bulbs are working',
-      'Empty trash/recycle bins, add fresh liners and backup in the bin',
-      'Run Roborock to vacuum/mop floors'
-    ]},
-    { id: 'exterior', icon: '🌿', name: 'Side Yard & Exterior', items: [
-      'Clear the driveway parking spot',
-      'Use leaf blower to clear side yard patio and garage entrance',
-      'Pick up any pet waste from yard',
-      'Tidy side yard patio, wipe down chairs/table',
-      'Wipe down cobwebs around all entrances (Interior and exterior)'
-    ]},
-    { id: 'arrival', icon: '✅', name: 'Arrival & Final Pass', items: [
-      'Set the scene for arrival - open blinds',
-      'Confirm Stargate-B WiFi is connecting (Ask google something on the speaker to verify)',
-      'Confirm no lingering pet odors - smell-check living area and bed',
-      'Vacuum the stairs to the basement',
-      'Quick walk-through as if you were the guest - does anything feel off?'
-    ]},
-    { id: 'admin', icon: '🗒', name: 'Host / Admin', items: [
-      'Set a new keypad code for new guest; test that it works',
-      'Note any issues to report to Airbnb within the review/claim window',
-      'Leave the guest a review (and respond to theirs)'
-    ]}
-  ];
-
-  const CHECK_SVG = '<svg width="13" height="10" viewBox="0 0 13 10" fill="none"><path d="M1.5 5L5 8.5L11.5 1.5" stroke="white" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-
-  // Build the sections
-  const content = document.getElementById('content');
-  SECTIONS.forEach((sec, si) => {
-    const open = si === 0;
-    const section = document.createElement('div');
-    section.className = 'section';
-    section.id = 'sec-' + sec.id;
-    section.innerHTML =
-      '<div class="section-header' + (open ? ' open' : '') + '" onclick="toggleSection(\'' + sec.id + '\')">' +
-        '<div class="section-left">' +
-          '<span class="section-icon">' + sec.icon + '</span>' +
-          '<span class="section-name">' + sec.name + '</span>' +
-          '<span class="section-badge" id="badge-' + sec.id + '">0/' + sec.items.length + '</span>' +
-        '</div>' +
-        '<span class="chevron' + (open ? ' open' : '') + '" id="chev-' + sec.id + '">▼</span>' +
-      '</div>' +
-      '<div class="section-prog"><div class="section-prog-fill" id="spf-' + sec.id + '" style="width:0%"></div></div>' +
-      '<div class="items' + (open ? ' open' : '') + '" id="items-' + sec.id + '">' +
-        sec.items.map(t =>
-          '<div class="item" onclick="toggle(this)"><div class="cb">' + CHECK_SVG + '</div>' +
-          '<span class="item-text">' + t + '</span></div>'
-        ).join('') +
-      '</div>';
-    content.appendChild(section);
-  });
-
-  // Set today's date
-  const d = new Date();
-  document.getElementById('date-badge').textContent =
-    d.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-
-  function toggle(el) {
-    const checked = !el.classList.contains('checked');
-    el.classList.toggle('checked', checked);
-    el.querySelector('.cb').classList.toggle('checked', checked);
-    save(); refresh();
-  }
-
-  function toggleSection(id) {
-    const items = document.getElementById('items-' + id);
-    const header = items.previousElementSibling.previousElementSibling;
-    const chev = document.getElementById('chev-' + id);
-    const open = items.classList.contains('open');
-    items.classList.toggle('open', !open);
-    header.classList.toggle('open', !open);
-    chev.classList.toggle('open', !open);
-  }
-
-  function refresh() {
-    let total = 0, done = 0;
-    SECTIONS.forEach(sec => {
-      const container = document.getElementById('items-' + sec.id);
-      if (!container) return;
-      const all = container.querySelectorAll('.item');
-      const checked = container.querySelectorAll('.item.checked');
-      const pct = all.length ? (checked.length / all.length * 100) : 0;
-      const badge = document.getElementById('badge-' + sec.id);
-      const spf = document.getElementById('spf-' + sec.id);
-      if (badge) { badge.textContent = checked.length + '/' + all.length; badge.classList.toggle('done', checked.length === all.length && all.length > 0); }
-      if (spf) spf.style.width = pct + '%';
-      total += all.length; done += checked.length;
+(function(){
+  var KEY='airbnb-checklist-v4';
+  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  boxes.forEach(function(b,i){b.dataset.k='c'+i;});
+  var saved={};
+  try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+  boxes.forEach(function(b){if(saved[b.dataset.k])b.checked=true;});
+  function save(){var o={};boxes.forEach(function(b){if(b.checked)o[b.dataset.k]=1;});localStorage.setItem(KEY,JSON.stringify(o));}
+  function refresh(){
+    ['turn','prep'].forEach(function(id){
+      var col=document.getElementById(id);
+      var cb=[].slice.call(col.querySelectorAll('input[type=checkbox]'));
+      var done=cb.filter(function(b){return b.checked;}).length;
+      col.querySelector('[data-cnt]').textContent=done+' / '+cb.length;
+      col.querySelector('.bar > i').style.width=(cb.length?Math.round(done/cb.length*100):0)+'%';
     });
-    const pct = total ? Math.round(done / total * 100) : 0;
-    document.getElementById('prog-bar').style.width = pct + '%';
-    document.getElementById('prog-label').textContent = done + ' of ' + total + ' complete';
-    document.getElementById('prog-pct').textContent = pct + '%';
-    document.getElementById('stat-done').textContent = done;
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('done-banner').classList.toggle('show', done === total && total > 0);
   }
-
-  function save() {
-    const state = {};
-    document.querySelectorAll('.item').forEach((item) => {
-      const parentId = item.closest('.items').id;
-      const idx = [...item.parentNode.children].indexOf(item);
-      state[parentId + '-' + idx] = item.classList.contains('checked');
-    });
-    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch(e) {}
-  }
-
-  function load() {
-    try {
-      const saved = localStorage.getItem(STORE);
-      if (!saved) return;
-      const state = JSON.parse(saved);
-      document.querySelectorAll('.item').forEach((item) => {
-        const idx = [...item.parentNode.children].indexOf(item);
-        const key = item.closest('.items').id + '-' + idx;
-        if (state[key]) { item.classList.add('checked'); item.querySelector('.cb').classList.add('checked'); }
-      });
-    } catch(e) {}
-  }
-
-  function showReset() { document.getElementById('overlay').classList.add('show'); }
-  function hideReset() { document.getElementById('overlay').classList.remove('show'); }
-  function doReset() {
-    document.querySelectorAll('.item').forEach(item => {
-      item.classList.remove('checked');
-      item.querySelector('.cb').classList.remove('checked');
-    });
-    hideReset(); save(); refresh();
-  }
-
-  load(); refresh();
+  boxes.forEach(function(b){b.addEventListener('change',function(){save();refresh();});});
+  window.resetAll=function(){if(confirm('Clear all checkmarks on this device?')){boxes.forEach(function(b){b.checked=false;});save();refresh();}};
+  refresh();
+})();
 </script>
 </body>
 </html>
