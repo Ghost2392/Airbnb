@@ -16,6 +16,10 @@
   header{max-width:1100px;margin:0 auto 14px}
   h1{font-size:20px;margin:0 0 4px}
   .sub{color:var(--muted);font-size:13px}
+  .tools{max-width:1100px;margin:0 auto 10px;display:flex;gap:8px;flex-wrap:wrap}
+  .tbtn{background:transparent;color:var(--muted);border:1px solid var(--line);
+    border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer}
+  .tbtn:hover{color:var(--ink);border-color:var(--muted)}
   .cols{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:16px}
   @media(max-width:760px){.cols{grid-template-columns:1fr}}
   .col{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden}
@@ -33,25 +37,39 @@
   .turn .bar > i{background:var(--turn)}
   .prep .bar > i{background:var(--prep)}
   .cnt{font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
-  section{padding:2px 16px 10px}
-  h3{font-size:13px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);
-    margin:14px 0 6px;border-bottom:1px solid var(--line);padding-bottom:5px}
+  section{padding:0 16px}
+  .sechead{width:100%;display:flex;align-items:center;gap:9px;background:transparent;
+    border:none;border-bottom:1px solid var(--line);color:var(--muted);cursor:pointer;
+    font:inherit;text-transform:uppercase;letter-spacing:.5px;font-size:13px;
+    padding:12px 2px 8px;margin-top:6px;text-align:left}
+  .sechead:hover{color:var(--ink)}
+  .chev{transition:transform .18s;display:inline-block;font-size:11px;color:var(--muted);flex:none}
+  section.collapsed .chev{transform:rotate(-90deg)}
+  .secname{flex:1}
+  .seccnt{font-variant-numeric:tabular-nums;font-size:12px;background:var(--card2);
+    color:var(--muted);border-radius:999px;padding:2px 9px;font-weight:600}
+  .seccnt.done{color:var(--prep)}
+  .secbody{padding:4px 0 6px}
+  section.collapsed .secbody{display:none}
   label{display:flex;gap:10px;align-items:flex-start;padding:7px 8px;border-radius:9px;
     font-size:14px;cursor:pointer}
   label:hover{background:var(--card2)}
   input[type=checkbox]{width:19px;height:19px;margin-top:1px;flex:none;accent-color:#7aa2ff;cursor:pointer}
   input:checked + span{color:var(--muted);text-decoration:line-through}
   .foot{max-width:1100px;margin:16px auto 0;color:var(--muted);font-size:12px;text-align:center}
-  .reset{background:transparent;color:var(--muted);border:1px solid var(--line);
-    border-radius:8px;padding:5px 12px;font-size:12px;cursor:pointer}
-  .reset:hover{color:var(--ink);border-color:var(--muted)}
 </style>
 </head>
 <body>
 <header>
   <h1>8271 Ralph Ln - Basement Suite Cleaning Checklist</h1>
-  <div class="sub">Two lists: <b>Turnover</b> (full reset after a guest leaves) and <b>Prep</b> (light refresh before the next guest when the unit has sat). Checkmarks save on this device only.</div>
+  <div class="sub">Two lists: <b>Turnover</b> (full reset after a guest leaves) and <b>Prep</b> (light refresh before the next guest when the unit has sat). Tap a section header to collapse it. Checkmarks save on this device only.</div>
 </header>
+
+<div class="tools">
+  <button class="tbtn" onclick="expandAll(true)">Expand all</button>
+  <button class="tbtn" onclick="expandAll(false)">Collapse all</button>
+  <button class="tbtn" onclick="resetAll()">Reset all checkmarks</button>
+</div>
 
 <div class="cols">
   <!-- TURNOVER -->
@@ -64,71 +82,85 @@
     <div class="bar"><i></i></div>
 
     <section>
-      <h3>Checkout &amp; Close-Out</h3>
-      <label><input type="checkbox"><span>Walk through and check for damage or missing items - photograph anything</span></label>
-      <label><input type="checkbox"><span>Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></label>
-      <label><input type="checkbox"><span>Strip bed sheets/pillowcases, gather all towels</span></label>
-      <label><input type="checkbox"><span>Start laundry (sheets, towels) in the washer/dryer</span></label>
-      <label><input type="checkbox"><span>Confirm all amenities present and working (TV, remotes, kitchen items)</span></label>
-      <label><input type="checkbox"><span>Take "ready" photos if anything was rearranged</span></label>
-      <label><input type="checkbox"><span>Note any issues to report to Airbnb within the review/claim window</span></label>
-      <label><input type="checkbox"><span>Leave the guest a review (and respond to theirs)</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Checkout &amp; Close-Out</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Walk through and check for damage or missing items - photograph anything</span></label>
+        <label><input type="checkbox"><span>Check for left-behind belongings (closet, under bed, bathroom, fridge, charger outlets)</span></label>
+        <label><input type="checkbox"><span>Strip bed sheets/pillowcases, gather all towels</span></label>
+        <label><input type="checkbox"><span>Start laundry (sheets, towels) in the washer/dryer</span></label>
+        <label><input type="checkbox"><span>Confirm all amenities present and working (TV, remotes, kitchen items)</span></label>
+        <label><input type="checkbox"><span>Take "ready" photos if anything was rearranged</span></label>
+        <label><input type="checkbox"><span>Note any issues to report to Airbnb within the review/claim window</span></label>
+        <label><input type="checkbox"><span>Leave the guest a review (and respond to theirs)</span></label>
+      </div>
     </section>
     <section>
-      <h3>Bedroom</h3>
-      <label><input type="checkbox"><span>Make bed with washed sheets, pillowcases, duvet cover (spare sheets in closet)</span></label>
-      <label><input type="checkbox"><span>Dust nightstands/surfaces, empty closet of prior items</span></label>
-      <label><input type="checkbox"><span>Clean closet mirror with Windex and paper towels</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Bedroom</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Make bed with washed sheets, pillowcases, duvet cover (spare sheets in closet)</span></label>
+        <label><input type="checkbox"><span>Dust nightstands/surfaces, empty closet of prior items</span></label>
+        <label><input type="checkbox"><span>Clean closet mirror with Windex and paper towels</span></label>
+      </div>
     </section>
     <section>
-      <h3>Bathroom</h3>
-      <label><input type="checkbox"><span>Clean walk-in shower, toilet, sink, mirror</span></label>
-      <label><input type="checkbox"><span>Clear hair from shower drain</span></label>
-      <label><input type="checkbox"><span>Hang washed towels 2 bath + 2 hand, plus bath mat</span></label>
-      <label><input type="checkbox"><span>Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
-      <label><input type="checkbox"><span>Empty trash, fresh liner</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Bathroom</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Clean walk-in shower, toilet, sink, mirror</span></label>
+        <label><input type="checkbox"><span>Clear hair from shower drain</span></label>
+        <label><input type="checkbox"><span>Hang washed towels 2 bath + 2 hand, plus bath mat</span></label>
+        <label><input type="checkbox"><span>Restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
+        <label><input type="checkbox"><span>Empty trash, fresh liner</span></label>
+      </div>
     </section>
     <section>
-      <h3>Kitchen</h3>
-      <label><input type="checkbox"><span>Start dishwasher and put away all dishes; check dishwasher empty</span></label>
-      <label><input type="checkbox"><span>Wipe microwave inside, counters, stovetop, sink</span></label>
-      <label><input type="checkbox"><span>Clean fridge; toss expired items</span></label>
-      <label><input type="checkbox"><span>Check coffee filters and sugar/creamer are stocked</span></label>
-      <label><input type="checkbox"><span>Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil</span></label>
-      <label><input type="checkbox"><span>Check glasses, mugs, plates, utensils, pots/pans all present and clean</span></label>
-      <label><input type="checkbox"><span>Vacuum both sides of kitchen floor mats</span></label>
-      <label><input type="checkbox"><span>Run/clean garbage disposal</span></label>
-      <label><input type="checkbox"><span>Check under sink for leaks or low supplies</span></label>
-      <label><input type="checkbox"><span>Empty trash/recycle bins, add fresh liners and backup in the bin</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Kitchen</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Start dishwasher and put away all dishes; check dishwasher empty</span></label>
+        <label><input type="checkbox"><span>Wipe microwave inside, counters, stovetop, sink</span></label>
+        <label><input type="checkbox"><span>Clean fridge; toss expired items</span></label>
+        <label><input type="checkbox"><span>Check coffee filters and sugar/creamer are stocked</span></label>
+        <label><input type="checkbox"><span>Starter supplies: dish soap, sponge, paper towels, trash bags, salt/pepper, oil</span></label>
+        <label><input type="checkbox"><span>Check glasses, mugs, plates, utensils, pots/pans all present and clean</span></label>
+        <label><input type="checkbox"><span>Vacuum both sides of kitchen floor mats</span></label>
+        <label><input type="checkbox"><span>Run/clean garbage disposal</span></label>
+        <label><input type="checkbox"><span>Check under sink for leaks or low supplies</span></label>
+        <label><input type="checkbox"><span>Empty trash/recycle bins, add fresh liners and backup in the bin</span></label>
+      </div>
     </section>
     <section>
-      <h3>Living Room &amp; General</h3>
-      <label><input type="checkbox"><span>Wipe/clear all surfaces (All tables, chairs, dry bar, window sills too)</span></label>
-      <label><input type="checkbox"><span>Close and latch all windows</span></label>
-      <label><input type="checkbox"><span>Dust surfaces, 65" TV screen and wipe remotes</span></label>
-      <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts</span></label>
-      <label><input type="checkbox"><span>Fluff couch and recliner cushions, check for pet hair; fold throw blankets</span></label>
-      <label><input type="checkbox"><span>Check all light bulbs are working</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Living Room &amp; General</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Wipe/clear all surfaces (All tables, chairs, dry bar, window sills too)</span></label>
+        <label><input type="checkbox"><span>Close and latch all windows</span></label>
+        <label><input type="checkbox"><span>Dust surfaces, 65" TV screen and wipe remotes</span></label>
+        <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and is logged out of prior accounts</span></label>
+        <label><input type="checkbox"><span>Fluff couch and recliner cushions, check for pet hair; fold throw blankets</span></label>
+        <label><input type="checkbox"><span>Check all light bulbs are working</span></label>
+      </div>
     </section>
     <section>
-      <h3>Side Yard &amp; Exterior</h3>
-      <label><input type="checkbox"><span>Clear the driveway parking spot</span></label>
-      <label><input type="checkbox"><span>Use leaf blower to clear side yard patio and garage entrance</span></label>
-      <label><input type="checkbox"><span>Pick up any pet waste from yard</span></label>
-      <label><input type="checkbox"><span>Tidy side yard patio, wipe down chairs/table</span></label>
-      <label><input type="checkbox"><span>Wipe down cobwebs around all entrances (Interior and exterior)</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Side Yard &amp; Exterior</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Clear the driveway parking spot</span></label>
+        <label><input type="checkbox"><span>Use leaf blower to clear side yard patio and garage entrance</span></label>
+        <label><input type="checkbox"><span>Pick up any pet waste from yard</span></label>
+        <label><input type="checkbox"><span>Tidy side yard patio, wipe down chairs/table</span></label>
+        <label><input type="checkbox"><span>Wipe down cobwebs around all entrances (Interior and exterior)</span></label>
+      </div>
     </section>
     <section>
-      <h3>Arrival &amp; Final Pass</h3>
-      <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
-      <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
-      <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
-      <label><input type="checkbox"><span>Confirm guest WiFi is connecting (ask the speaker something to verify)</span></label>
-      <label><input type="checkbox"><span>Make sure smart lock code for new guest exists; test that it works</span></label>
-      <label><input type="checkbox"><span>Run Roborock to vacuum/mop floors</span></label>
-      <label><input type="checkbox"><span>Check for spider webs along ceiling corners/walls (use broom to clean)</span></label>
-      <label><input type="checkbox"><span>Confirm no lingering pet odors - smell-check living area and bed (use Ozium spray)</span></label>
-      <label><input type="checkbox"><span>Vacuum the stairs to the basement</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Arrival &amp; Final Pass</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
+        <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
+        <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
+        <label><input type="checkbox"><span>Confirm guest WiFi is connecting (ask the speaker something to verify)</span></label>
+        <label><input type="checkbox"><span>Make sure smart lock code for new guest exists; test that it works</span></label>
+        <label><input type="checkbox"><span>Run Roborock to vacuum/mop floors</span></label>
+        <label><input type="checkbox"><span>Check for spider webs along ceiling corners/walls (use broom to clean)</span></label>
+        <label><input type="checkbox"><span>Confirm no lingering pet odors - smell-check living area and bed (use Ozium spray)</span></label>
+        <label><input type="checkbox"><span>Vacuum the stairs to the basement</span></label>
+      </div>
     </section>
   </div>
 
@@ -142,48 +174,67 @@
     <div class="bar"><i></i></div>
 
     <section>
-      <h3>Refresh</h3>
-      <label><input type="checkbox"><span>Quick dust where dust settles - nightstands, dry bar, tables, 65" TV, window sills</span></label>
-      <label><input type="checkbox"><span>Run Roborock / quick vacuum floors and basement stairs</span></label>
-      <label><input type="checkbox"><span>Air out unit; smell-check for musty or pet odors (Ozium if needed)</span></label>
-      <label><input type="checkbox"><span>Confirm bed made with fresh linens and looks crisp</span></label>
-      <label><input type="checkbox"><span>Confirm bathroom towels hung (2 bath + 2 hand + mat) and clean</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Refresh</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Quick dust where dust settles - nightstands, dry bar, tables, 65" TV, window sills</span></label>
+        <label><input type="checkbox"><span>Run Roborock / quick vacuum floors and basement stairs</span></label>
+        <label><input type="checkbox"><span>Air out unit; smell-check for musty or pet odors (Ozium if needed)</span></label>
+        <label><input type="checkbox"><span>Confirm bed made with fresh linens and looks crisp</span></label>
+        <label><input type="checkbox"><span>Confirm bathroom towels hung (2 bath + 2 hand + mat) and clean</span></label>
+      </div>
     </section>
     <section>
-      <h3>Verify Supplies</h3>
-      <label><input type="checkbox"><span>Bathroom restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
-      <label><input type="checkbox"><span>Kitchen starter supplies: dish soap, sponge, paper towels, trash bags, coffee filters, sugar/creamer</span></label>
-      <label><input type="checkbox"><span>Trash/recycle bins empty with fresh liners</span></label>
-      <label><input type="checkbox"><span>Confirm fridge empty and clean</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Verify Supplies</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Bathroom restock: toilet paper (2+ rolls), hand soap, shampoo/conditioner, body wash</span></label>
+        <label><input type="checkbox"><span>Kitchen starter supplies: dish soap, sponge, paper towels, trash bags, coffee filters, sugar/creamer</span></label>
+        <label><input type="checkbox"><span>Trash/recycle bins empty with fresh liners</span></label>
+        <label><input type="checkbox"><span>Confirm fridge empty and clean</span></label>
+      </div>
     </section>
     <section>
-      <h3>Arrival &amp; Final Pass</h3>
-      <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
-      <label><input type="checkbox"><span>Set and test smart lock code for the new guest</span></label>
-      <label><input type="checkbox"><span>Confirm guest WiFi is connecting</span></label>
-      <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and logged out of prior accounts</span></label>
-      <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
-      <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
-      <label><input type="checkbox"><span>Exterior: clear driveway spot, tidy patio, knock down entrance cobwebs</span></label>
+      <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Arrival &amp; Final Pass</span><span class="seccnt" data-seccnt></span></button>
+      <div class="secbody">
+        <label><input type="checkbox"><span>Set the scene for arrival - open blinds</span></label>
+        <label><input type="checkbox"><span>Set and test smart lock code for the new guest</span></label>
+        <label><input type="checkbox"><span>Confirm guest WiFi is connecting</span></label>
+        <label><input type="checkbox"><span>Confirm TV / Chromecast / Roku powers on and logged out of prior accounts</span></label>
+        <label><input type="checkbox"><span>Check basement temperature and adjust</span></label>
+        <label><input type="checkbox"><span>Quick walk-through as if you were the guest - does anything feel off?</span></label>
+        <label><input type="checkbox"><span>Exterior: clear driveway spot, tidy patio, knock down entrance cobwebs</span></label>
+      </div>
     </section>
   </div>
 </div>
 
-<div class="foot">
-  <button class="reset" onclick="resetAll()">Reset all checkmarks</button>
-  <div style="margin-top:8px">Checkmarks are saved only in this browser on this device.</div>
-</div>
+<div class="foot">Checkmarks and open/closed sections are saved only in this browser on this device.</div>
 
 <script>
 (function(){
   var KEY='airbnb-checklist-v4';
+  var CKEY='airbnb-collapse-v4';
   var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
   boxes.forEach(function(b,i){b.dataset.k='c'+i;});
-  var saved={};
+  var sections=[].slice.call(document.querySelectorAll('section'));
+  sections.forEach(function(s,i){s.dataset.s='s'+i;});
+
+  var saved={}, collapsed={};
   try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
+  try{collapsed=JSON.parse(localStorage.getItem(CKEY)||'{}');}catch(e){collapsed={};}
   boxes.forEach(function(b){if(saved[b.dataset.k])b.checked=true;});
-  function save(){var o={};boxes.forEach(function(b){if(b.checked)o[b.dataset.k]=1;});localStorage.setItem(KEY,JSON.stringify(o));}
+  sections.forEach(function(s){if(collapsed[s.dataset.s])s.classList.add('collapsed');});
+
+  function saveChecks(){var o={};boxes.forEach(function(b){if(b.checked)o[b.dataset.k]=1;});localStorage.setItem(KEY,JSON.stringify(o));}
+  function saveCollapse(){var o={};sections.forEach(function(s){if(s.classList.contains('collapsed'))o[s.dataset.s]=1;});localStorage.setItem(CKEY,JSON.stringify(o));}
+
   function refresh(){
+    sections.forEach(function(s){
+      var cb=[].slice.call(s.querySelectorAll('input[type=checkbox]'));
+      var done=cb.filter(function(b){return b.checked;}).length;
+      var el=s.querySelector('[data-seccnt]');
+      el.textContent=done+'/'+cb.length;
+      el.classList.toggle('done', done===cb.length && cb.length>0);
+    });
     ['turn','prep'].forEach(function(id){
       var col=document.getElementById(id);
       var cb=[].slice.call(col.querySelectorAll('input[type=checkbox]'));
@@ -192,8 +243,24 @@
       col.querySelector('.bar > i').style.width=(cb.length?Math.round(done/cb.length*100):0)+'%';
     });
   }
-  boxes.forEach(function(b){b.addEventListener('change',function(){save();refresh();});});
-  window.resetAll=function(){if(confirm('Clear all checkmarks on this device?')){boxes.forEach(function(b){b.checked=false;});save();refresh();}};
+
+  boxes.forEach(function(b){b.addEventListener('change',function(){saveChecks();refresh();});});
+  sections.forEach(function(s){
+    s.querySelector('.sechead').addEventListener('click',function(){
+      s.classList.toggle('collapsed');saveCollapse();
+    });
+  });
+
+  window.expandAll=function(open){
+    sections.forEach(function(s){s.classList.toggle('collapsed', !open);});
+    saveCollapse();
+  };
+  window.resetAll=function(){
+    if(confirm('Clear all checkmarks on this device?')){
+      boxes.forEach(function(b){b.checked=false;});saveChecks();refresh();
+    }
+  };
+
   refresh();
 })();
 </script>
