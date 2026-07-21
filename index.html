@@ -4,6 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Basement Suite Cleaning Checklist</title>
+<meta name="theme-color" content="#0f1420">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Cleaning">
+<link rel="manifest" href='data:application/manifest+json,{"name":"Cleaning Checklist","short_name":"Cleaning","start_url":".","display":"standalone","background_color":"%230f1420","theme_color":"%230f1420"}'>
 <style>
   :root{
     --bg:#0f1420; --card:#171e2e; --card2:#1d2740; --ink:#e8edf7; --muted:#93a0b8;
@@ -75,6 +80,16 @@
   .complete-msg{font-size:12px;color:var(--prep);text-align:center;margin-top:8px}
   .complete-top{margin:0 16px 10px}
   .foot{max-width:1100px;margin:16px auto 0;color:var(--muted);font-size:12px;text-align:center}
+  @media print{
+    body{background:#fff;color:#000;padding:0}
+    .tools,.bar,.complete-top,.complete-wrap,.secall,.chev{display:none!important}
+    .cols{display:block;max-width:none}
+    .col{border:1px solid #bbb;margin-bottom:14px;break-inside:avoid;background:#fff}
+    .colhead h2,.desc,.sechead,.secname,.seccnt{color:#000}
+    .sechead{border-color:#bbb}
+    section.collapsed .secbody{display:block!important}
+    input[type=checkbox]{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  }
 </style>
 </head>
 <body>
@@ -325,6 +340,7 @@
   // ==== Completion notification ====
   // Paste your Google Apps Script Web app URL (ends in /exec) between the quotes below:
   var NOTIFY_URL='https://script.google.com/macros/s/AKfycbz9sleTMSSQ1wCPI47kENCc1tr1-WIxGTSKgZzq2FLM1fL1EMqGoR6hHMAcPEMKlb3PVw/exec';
+  var SECRET='S439aafRWhMTVwr5LewpCG';
   function sendComplete(col,list){
     var noteEl=col.querySelector('.complete-note');
     var note=((noteEl&&noteEl.value)||'').slice(0,300);
@@ -338,9 +354,15 @@
     var finish=function(){
       btns.forEach(function(b){b.textContent='Sent ✓';});
       [].slice.call(col.querySelectorAll('.complete-msg')).forEach(function(m){m.hidden=false;});
+      setTimeout(function(){
+        if(confirm('Notification sent. Clear the checkmarks for this list so the next clean starts fresh?')){
+          [].slice.call(col.querySelectorAll('.secbody input[type=checkbox]')).forEach(function(c){c.checked=false;});
+          saveChecks();refresh();
+        }
+      },300);
     };
     fetch(NOTIFY_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({
-      title:pageTitle, list:list, note:note, done:String(doneCount), total:String(total), missed:missed.join(' | ')
+      secret:SECRET, title:pageTitle, list:list, note:note, done:String(doneCount), total:String(total), missed:missed.join(' | ')
     })}).then(finish).catch(finish);
   }
   [].slice.call(document.querySelectorAll('.complete-btn')).forEach(function(btn){
