@@ -53,6 +53,9 @@
   .seccnt{font-variant-numeric:tabular-nums;font-size:12px;background:var(--card2);
     color:var(--muted);border-radius:999px;padding:2px 9px;font-weight:600}
   .seccnt.done{color:var(--prep)}
+  .secall{display:inline-flex;align-items:center;gap:5px;flex:none;cursor:pointer;
+    text-transform:none;letter-spacing:0;font-size:11px;color:var(--muted)}
+  .secall input{width:15px;height:15px;margin:0;accent-color:#7aa2ff;cursor:pointer}
   .secbody{padding:4px 0 6px}
   section.collapsed .secbody{display:none}
   label{display:flex;gap:10px;align-items:flex-start;padding:7px 8px;border-radius:9px;
@@ -97,7 +100,7 @@
     <div class="desc">Do the complete clean after a guest checks out.</div>
     <div class="bar"><i></i></div>
     <div class="complete-top">
-      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover complete</button>
+      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover Complete</button>
     </div>
 
     <section>
@@ -183,7 +186,7 @@
     </section>
     <div class="complete-wrap">
       <input class="complete-note" type="text" placeholder="Optional note (e.g. cleaning date, anything to flag)">
-      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover complete</button>
+      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover Complete</button>
       <div class="complete-msg" hidden>Sent - thanks! The host has been notified.</div>
     </div>
   </div>
@@ -197,7 +200,7 @@
     <div class="desc">Use before a check-in when the unit was already turned over and may have sat. No deep cleaning.</div>
     <div class="bar"><i></i></div>
     <div class="complete-top">
-      <button class="complete-btn" type="button" data-list="Prep">Mark Prep complete</button>
+      <button class="complete-btn" type="button" data-list="Prep">Mark Prep Complete</button>
     </div>
 
     <section>
@@ -233,7 +236,7 @@
     </section>
     <div class="complete-wrap">
       <input class="complete-note" type="text" placeholder="Optional note (e.g. cleaning date, anything to flag)">
-      <button class="complete-btn" type="button" data-list="Prep">Mark Prep complete</button>
+      <button class="complete-btn" type="button" data-list="Prep">Mark Prep Complete</button>
       <div class="complete-msg" hidden>Sent - thanks! The host has been notified.</div>
     </div>
   </div>
@@ -256,10 +259,23 @@
     var t=document.body.classList.contains('light')?'dark':'light';
     localStorage.setItem(TKEY,t);applyTheme(t);
   };
-  var boxes=[].slice.call(document.querySelectorAll('input[type=checkbox]'));
+  var boxes=[].slice.call(document.querySelectorAll('.secbody input[type=checkbox]'));
   boxes.forEach(function(b,i){b.dataset.k='c'+i;});
   var sections=[].slice.call(document.querySelectorAll('section'));
-  sections.forEach(function(s,i){s.dataset.s='s'+i;});
+  sections.forEach(function(s,i){
+    s.dataset.s='s'+i;
+    var head=s.querySelector('.sechead');
+    var all=document.createElement('label');
+    all.className='secall';
+    all.innerHTML='<input type="checkbox"><span>All</span>';
+    head.appendChild(all);
+    all.addEventListener('click',function(ev){ev.stopPropagation();});
+    all.querySelector('input').addEventListener('change',function(){
+      var v=this.checked;
+      [].slice.call(s.querySelectorAll('.secbody input[type=checkbox]')).forEach(function(c){c.checked=v;});
+      saveChecks();refresh();
+    });
+  });
 
   var saved={}, collapsed={};
   try{saved=JSON.parse(localStorage.getItem(KEY)||'{}');}catch(e){saved={};}
@@ -272,15 +288,17 @@
 
   function refresh(){
     sections.forEach(function(s){
-      var cb=[].slice.call(s.querySelectorAll('input[type=checkbox]'));
+      var cb=[].slice.call(s.querySelectorAll('.secbody input[type=checkbox]'));
       var done=cb.filter(function(b){return b.checked;}).length;
       var el=s.querySelector('[data-seccnt]');
       el.textContent=done+'/'+cb.length;
       el.classList.toggle('done', done===cb.length && cb.length>0);
+      var all=s.querySelector('.secall input');
+      if(all){all.checked=(cb.length>0 && done===cb.length);all.indeterminate=(done>0 && done<cb.length);}
     });
     ['turn','prep'].forEach(function(id){
       var col=document.getElementById(id);
-      var cb=[].slice.call(col.querySelectorAll('input[type=checkbox]'));
+      var cb=[].slice.call(col.querySelectorAll('.secbody input[type=checkbox]'));
       var done=cb.filter(function(b){return b.checked;}).length;
       col.querySelector('[data-cnt]').textContent=done+' / '+cb.length;
       col.querySelector('.bar > i').style.width=(cb.length?Math.round(done/cb.length*100):0)+'%';
@@ -310,13 +328,20 @@
   function sendComplete(col,list){
     var noteEl=col.querySelector('.complete-note');
     var note=((noteEl&&noteEl.value)||'').slice(0,300);
+    var cbs=[].slice.call(col.querySelectorAll('.secbody input[type=checkbox]'));
+    var total=cbs.length;
+    var doneCount=cbs.filter(function(b){return b.checked;}).length;
+    var missed=cbs.filter(function(b){return !b.checked;}).map(function(b){return b.nextElementSibling.textContent;});
+    var pageTitle=((document.querySelector('h1')||{}).textContent||'Cleaning Checklist').trim();
     var btns=[].slice.call(col.querySelectorAll('.complete-btn'));
     btns.forEach(function(b){b.disabled=true;b.textContent='Sending...';});
-    var done=function(){
+    var finish=function(){
       btns.forEach(function(b){b.textContent='Sent ✓';});
       [].slice.call(col.querySelectorAll('.complete-msg')).forEach(function(m){m.hidden=false;});
     };
-    fetch(NOTIFY_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({list:list,note:note})}).then(done).catch(done);
+    fetch(NOTIFY_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({
+      title:pageTitle, list:list, note:note, done:String(doneCount), total:String(total), missed:missed.join(' | ')
+    })}).then(finish).catch(finish);
   }
   [].slice.call(document.querySelectorAll('.complete-btn')).forEach(function(btn){
     btn.addEventListener('click',function(){
