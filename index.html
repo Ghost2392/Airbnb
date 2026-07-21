@@ -60,6 +60,17 @@
   label:hover{background:var(--card2)}
   input[type=checkbox]{width:19px;height:19px;margin-top:1px;flex:none;accent-color:#7aa2ff;cursor:pointer}
   input:checked + span{color:var(--muted);text-decoration:line-through}
+  .complete-wrap{margin:14px 16px 16px;border-top:1px solid var(--line);padding-top:12px}
+  .complete-note{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--ink);
+    border-radius:9px;padding:9px 11px;font:inherit;font-size:14px;margin-bottom:9px}
+  .complete-note::placeholder{color:var(--muted)}
+  .complete-btn{width:100%;border:none;border-radius:9px;padding:11px;font:inherit;font-size:14px;
+    font-weight:700;cursor:pointer;color:#fff}
+  .turn .complete-btn{background:var(--turn)}
+  .prep .complete-btn{background:var(--prep)}
+  .complete-btn:disabled{opacity:.65;cursor:default}
+  .complete-msg{font-size:12px;color:var(--prep);text-align:center;margin-top:8px}
+  .complete-top{margin:0 16px 10px}
   .foot{max-width:1100px;margin:16px auto 0;color:var(--muted);font-size:12px;text-align:center}
 </style>
 </head>
@@ -85,6 +96,9 @@
     </div>
     <div class="desc">Do the complete clean after a guest checks out.</div>
     <div class="bar"><i></i></div>
+    <div class="complete-top">
+      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover complete</button>
+    </div>
 
     <section>
       <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Checkout &amp; Close-Out</span><span class="seccnt" data-seccnt></span></button>
@@ -167,6 +181,11 @@
         <label><input type="checkbox"><span>Vacuum the stairs to the basement</span></label>
       </div>
     </section>
+    <div class="complete-wrap">
+      <input class="complete-note" type="text" placeholder="Optional note (e.g. cleaning date, anything to flag)">
+      <button class="complete-btn" type="button" data-list="Turnover">Mark Turnover complete</button>
+      <div class="complete-msg" hidden>Sent - thanks! The host has been notified.</div>
+    </div>
   </div>
 
   <!-- PREP -->
@@ -177,6 +196,9 @@
     </div>
     <div class="desc">Use before a check-in when the unit was already turned over and may have sat. No deep cleaning.</div>
     <div class="bar"><i></i></div>
+    <div class="complete-top">
+      <button class="complete-btn" type="button" data-list="Prep">Mark Prep complete</button>
+    </div>
 
     <section>
       <button class="sechead" type="button"><span class="chev">&#9662;</span><span class="secname">Refresh</span><span class="seccnt" data-seccnt></span></button>
@@ -209,6 +231,11 @@
         <label><input type="checkbox"><span>Exterior: clear driveway spot, tidy patio, knock down entrance cobwebs</span></label>
       </div>
     </section>
+    <div class="complete-wrap">
+      <input class="complete-note" type="text" placeholder="Optional note (e.g. cleaning date, anything to flag)">
+      <button class="complete-btn" type="button" data-list="Prep">Mark Prep complete</button>
+      <div class="complete-msg" hidden>Sent - thanks! The host has been notified.</div>
+    </div>
   </div>
 </div>
 
@@ -276,6 +303,29 @@
       boxes.forEach(function(b){b.checked=false;});saveChecks();refresh();
     }
   };
+
+  // ==== Completion notification ====
+  // Paste your Google Apps Script Web app URL (ends in /exec) between the quotes below:
+  var NOTIFY_URL='https://script.google.com/macros/s/AKfycbz9sleTMSSQ1wCPI47kENCc1tr1-WIxGTSKgZzq2FLM1fL1EMqGoR6hHMAcPEMKlb3PVw/exec';
+  function sendComplete(col,list){
+    var noteEl=col.querySelector('.complete-note');
+    var note=((noteEl&&noteEl.value)||'').slice(0,300);
+    var btns=[].slice.call(col.querySelectorAll('.complete-btn'));
+    btns.forEach(function(b){b.disabled=true;b.textContent='Sending...';});
+    var done=function(){
+      btns.forEach(function(b){b.textContent='Sent ✓';});
+      [].slice.call(col.querySelectorAll('.complete-msg')).forEach(function(m){m.hidden=false;});
+    };
+    fetch(NOTIFY_URL,{method:'POST',mode:'no-cors',body:new URLSearchParams({list:list,note:note})}).then(done).catch(done);
+  }
+  [].slice.call(document.querySelectorAll('.complete-btn')).forEach(function(btn){
+    btn.addEventListener('click',function(){
+      var list=btn.getAttribute('data-list');
+      if(NOTIFY_URL.indexOf('http')!==0){alert('Notifications are not set up yet.');return;}
+      if(!confirm('Are you sure the '+list+' checklist is complete? This will notify the host.'))return;
+      sendComplete(btn.closest('.col'),list);
+    });
+  });
 
   refresh();
 })();
